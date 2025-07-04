@@ -373,33 +373,17 @@ def add_header(response):
 
 
 if __name__ == '__main__':
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    if not os.path.exists(DETECTION_FOLDER):
-        os.makedirs(DETECTION_FOLDER, exist_ok=True)
-    if not os.path.exists(VIDEO_FOLDER):
-        os.makedirs(VIDEO_FOLDER, exist_ok=True)
-    if not os.path.exists(CSV_FOLDER):
-        os.makedirs(CSV_FOLDER, exist_ok=True)
-    if not os.path.exists(METADATA_FOLDER):
-        os.makedirs(METADATA_FOLDER, exist_ok=True)
+    # Create necessary folders if they don't exist
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    os.makedirs(DETECTION_FOLDER, exist_ok=True)
+    os.makedirs(VIDEO_FOLDER, exist_ok=True)
+    os.makedirs(CSV_FOLDER, exist_ok=True)
+    os.makedirs(METADATA_FOLDER, exist_ok=True)
 
-    args = parser.parse_args()
-
+    # Optional: disable GPU if needed
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-    if args.ngrok:
-        run_with_ngrok(app)
-        app.run()
-    else:
-        hostname = str.split(args.host, ':')
-        if len(hostname) == 1:
-            port = 4000
-        else:
-            port = hostname[1]
-        host = hostname[0]
-
-        app.run(host=host, port=port, debug=args.debug, use_reloader=False,
-                ssl_context='adhoc')
+    # Run app on Render default port and host
+    app.run(host='0.0.0.0', port=10000)
 
 # Run: python app.py --host localhost:8000
